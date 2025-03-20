@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const apiKey = process.env.NEXT_PUBLIC_GOOGLE_GEMINI_API_KEY;
-console.log(apiKey)
 const genAI = new GoogleGenerativeAI(apiKey ?? "");
 
 export async function GET(req: NextRequest) {
