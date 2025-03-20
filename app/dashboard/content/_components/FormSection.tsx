@@ -1,19 +1,23 @@
 "use client"
-import React, { useState } from 'react'
+import React, {useContext, useState } from 'react'
 import { TEMPLATE } from '../../_components/TemplateListSection'
 import Image from 'next/image';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Loader2Icon } from 'lucide-react';
+import { TotalUsageContext } from '@/app/(context)/TotalUsageContext';
+import { UserSubscriptionContext } from '@/app/(context)/UserSubscriptionContext';
+import { redirect } from "next/navigation";
 
 interface PROPS {
     selectedTemplate?: TEMPLATE;
     userFormInput:any,
     loading:boolean
 }
-
 function FormSection({ selectedTemplate,userFormInput,loading }: PROPS) {
+    const {totalUsage,setTotalUsage}=useContext(TotalUsageContext)
+    const {userSubscription,setUserSubscription}=useContext(UserSubscriptionContext);
 
     const [formData,setFormData]=useState<any>();
 
@@ -24,6 +28,10 @@ function FormSection({ selectedTemplate,userFormInput,loading }: PROPS) {
 
     const onSubmit=(e:any)=>{
         e.preventDefault();
+        if(userSubscription)
+        {if(totalUsage/1000000>1) {alert("Purchase Extra Credit");redirect("/dashboard/billing");}}
+        else
+        {if(totalUsage/10000>1) {alert("Purchase Extra Credit");redirect("/dashboard/billing")}}
         userFormInput(formData)
     }
 
@@ -37,7 +45,7 @@ function FormSection({ selectedTemplate,userFormInput,loading }: PROPS) {
 
             <form className='mt-6' onSubmit={onSubmit}>
                 {selectedTemplate?.form?.map((item, index) => (
-                    <div className='my-2 flex flex-col gap-2 mb-7'>
+                    <div key={index} className='my-2 flex flex-col gap-2 mb-7'>
                         <label className='font-bold'>{item.label}</label>
                         {item.field == 'input' ?
                             <Input name={item.name} required={item?.required}

@@ -8,15 +8,14 @@ import { Button } from '@/components/ui/button'
 import { ArrowLeft } from 'lucide-react'
 import Link from 'next/link'
 import { chatSession } from '@/utils/AiModal'
-import { db } from '@/utils/db'
-import { AIOutput } from '@/utils/schema'
-
+import prisma from "../../../../lib/prisma.js"
 import moment from 'moment'
 import { TotalUsageContext } from '@/app/(context)/TotalUsageContext'
 import { useRouter } from 'next/navigation'
 import { UserSubscriptionContext } from '@/app/(context)/UserSubscriptionContext'
 import { UpdateCreditUsageContext } from '@/app/(context)/UpdateCreditUsageContext'
 import { useUser } from '@clerk/nextjs'
+import axios from 'axios'
 
 interface PROPS{
     params:{
@@ -41,12 +40,12 @@ function CreateNewContent(props:PROPS) {
      * @returns 
      */
     const GenerateAIContent=async(formData:any)=>{
-        if(totalUsage>=10000&&!userSubscription)
-            {
-                console.log("Please Upgrade");
-                router.push('/dashboard/billing')
-                return ;
-            }
+        // if(totalUsage>=10000&&!userSubscription)
+        //     {
+        //         console.log("Please Upgrade");
+        //         router.push('/dashboard/billing')
+        //         return ;
+        //     }
         setLoading(true);
         const SelectedPrompt=selectedTemplate?.aiPrompt;
         const FinalAIPrompt=JSON.stringify(formData)+", "+SelectedPrompt;
@@ -55,21 +54,20 @@ function CreateNewContent(props:PROPS) {
         setAiOutput(result?.response.text());
         await SaveInDb(JSON.stringify(formData),selectedTemplate?.slug,result?.response.text())
         setLoading(false);
-        
         setUpdateCreditUsage(Date.now())
 
     }
 
-    const SaveInDb=async(formData:any,slug:any,aiResp:string)=>{
-        const result=await db.insert(AIOutput).values({
-            formData:formData,
-            templateSlug:slug,
-            aiResponse:aiResp,
-            createdBy:user?.primaryEmailAddress?.emailAddress,
-            createdAt:moment().format('DD/MM/yyyy'),
-        });
+    const SaveInDb=async(formData:any,templateSlug:any,aiResponse:string)=>{
+        const response = await axios.post("/api/ai",
+        {
+                formData,
+                templateSlug,
+                aiResponse,
+        },
+    );
 
-        console.log(result);
+        console.log(response.data);
     }
     
 

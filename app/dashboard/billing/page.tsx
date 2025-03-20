@@ -3,11 +3,10 @@ import { Button } from '@/components/ui/button'
 import React, { useContext, useState } from 'react'
 import axio from 'axios'
 import { Loader2Icon } from 'lucide-react';
-import { db } from '@/utils/db';
-import { UserSubscription } from '@/utils/schema';
 import { useUser } from '@clerk/nextjs';
 import moment from 'moment';
 import { UserSubscriptionContext } from '@/app/(context)/UserSubscriptionContext';
+import axios from 'axios'
 function billing() {
 
   const [loading,setLoading]=useState(false);
@@ -47,10 +46,9 @@ function billing() {
   }
 
   const SaveSubcription=async(paymentId:string)=>{
-    const result=await db.insert(UserSubscription)
-    .values({
+    const result=await axios.post("/api/userSubscription",{
       email:user?.primaryEmailAddress?.emailAddress,
-      userName:user?.fullName,
+      username:user?.fullName,
       active:true,
       paymentId:paymentId,
       joinDate:moment().format('DD/MM/yyyy')

@@ -1,10 +1,8 @@
 "use client"
 import { Button } from '@/components/ui/button'
-import { db } from '@/utils/db';
-import { AIOutput, UserSubscription } from '@/utils/schema';
+import Link from "next/link";
 import { useUser } from '@clerk/nextjs';
-
-import { eq } from 'drizzle-orm';
+import axios from "axios";
 import React, { useContext, useEffect, useState } from 'react'
 import { HISTORY } from '../history/page';
 import { TotalUsageContext } from '@/app/(context)/TotalUsageContext';
@@ -26,20 +24,20 @@ import { UpdateCreditUsageContext } from '@/app/(context)/UpdateCreditUsageConte
 
     useEffect(()=>{
         user&&GetData();
-    },[updateCreditUsage&&user]);
+    },[updateCreditUsage]);
 
     const GetData=async()=>{
          {/* @ts-ignore */}
-        const result:HISTORY[]=await db.select().from(AIOutput).where(eq(AIOutput.createdBy,user?.primaryEmailAddress?.emailAddress));
+        const result=await axios.get("/api/ai")
         
-        GetTotalUsage(result)
+        GetTotalUsage(result.data)
     }
 
     const IsUserSubscribe=async()=>{
          {/* @ts-ignore */}
-        const result=await db.select().from(UserSubscription).where(eq(UserSubscription.email,user?.primaryEmailAddress?.emailAddress));
-        console.log(result)
-        if(result.length>0)
+        const result=await axios.get("/api/userSubscription");
+        console.log(result.data)
+        if(result.data.length>0)
             {
                 setUserSubscription(true);
                 setMaxWords(1000000);
@@ -72,7 +70,9 @@ import { UpdateCreditUsageContext } from '@/app/(context)/UpdateCreditUsageConte
             </div>
             <h2 className='text-sm my-2'>{totalUsage}/{maxWords} credit used</h2>
         </div>
+        <Link href="/dashboard/billing">
         <Button variant={'secondary'} className='w-full my-3 text-primary'>Upgrade</Button>
+        </Link>
     </div>
   )
 }

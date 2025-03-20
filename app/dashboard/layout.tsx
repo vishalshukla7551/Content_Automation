@@ -17,9 +17,9 @@ function layout({
     const [updateCreditUsage,setUpdateCreditUsage]=useState<any>()
 
   return (
+    <UpdateCreditUsageContext.Provider value={{updateCreditUsage,setUpdateCreditUsage}}>
     <TotalUsageContext.Provider value={{totalUsage,setTotalUsage}}>
       <UserSubscriptionContext.Provider value={{userSubscription,setUserSubscription}}>
-        <UpdateCreditUsageContext.Provider value={{updateCreditUsage,setUpdateCreditUsage}}>
     <div className='bg-slate-100 min-h-screen'>
         <div className='md:w-64 hidden md:block fixed'>
             <SideNav/>
@@ -30,9 +30,9 @@ function layout({
         </div>
     
     </div>
-    </UpdateCreditUsageContext.Provider>
     </UserSubscriptionContext.Provider>
     </TotalUsageContext.Provider>
+    </UpdateCreditUsageContext.Provider>
   )
 }
 
