@@ -12,23 +12,45 @@ function billing() {
   const [loading,setLoading]=useState(false);
   const {user}=useUser();
     const {userSubscription,setUserSubscription}=useContext(UserSubscriptionContext);
-    
-  const CreateSubscription=()=>{
-    setLoading(true)
-    axio.post('/api/create-subscription',{})
-    .then(resp=>{
-      console.log(resp.data);
-      OnPayment(resp.data.id)
-    },(error)=>{
-      setLoading(false);
-    })
-  }
+    const loadRazorpayScript = () => {
+      return new Promise((resolve, reject) => {
+        const script = document.createElement("script");
+        script.src = "https://checkout.razorpay.com/v1/checkout.js";
+        script.onload = () => resolve(true);
+        script.onerror = () => reject(false);
+        document.body.appendChild(script);
+      });
+    };
+    const CreateSubscription = async () => {
+      try {
+        setLoading(true);
+        
+        // Load Razorpay script before proceeding
+        const isLoaded = await loadRazorpayScript();
+        if (!isLoaded) {
+          alert("Failed to load Razorpay. Please check your internet connection.");
+          setLoading(false);
+          return;
+        }
+  
+        // Make API call to create a subscription order
+        const response = await axios.post("/api/create-subscription", {});
+        console.log("Subscription Response:", response.data);
+  
+        // Proceed to payment
+        OnPayment(response.data.id);
+      } catch (error) {
+        console.error("Error creating subscription:", error);
+        alert("Failed to create subscription. Please try again.");
+        setLoading(false);
+      }
+    };
 
   const OnPayment=(subId:string)=>{
     const options={
       "key":process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
       "subscription_id":subId,
-      "name":'Tubeguruji AI Apps',
+      "name":'Content Posting App',
       description:'Monthly Subscription',
       handler:async(resp:any)=>{
         console.log(resp);
@@ -76,11 +98,12 @@ function billing() {
         </h2>
 
         <p className="mt-2 sm:mt-4">
-          <strong className="text-3xl font-bold text-gray-900 sm:text-4xl"> 0$ </strong>
+          <strong className="text-3xl font-bold text-gray-900 sm:text-4xl"> ₹0 </strong>
 
           <span className="text-sm font-medium text-gray-700">/month</span>
         </p>
       </div>
+
 
       <ul className="mt-6 space-y-2">
         <li className="flex items-center gap-1">
@@ -162,7 +185,7 @@ function billing() {
         </h2>
 
         <p className="mt-2 sm:mt-4">
-          <strong className="text-3xl font-bold text-gray-900 sm:text-4xl"> 9.99$ </strong>
+          <strong className="text-3xl font-bold text-gray-900 sm:text-4xl"> ₹299 </strong>
 
           <span className="text-sm font-medium text-gray-700">/month</span>
         </p>
@@ -232,7 +255,7 @@ function billing() {
 
       <Button
       disabled={loading}
-        onClick={()=>CreateSubscription()}
+        onClick={!userSubscription?()=>CreateSubscription():()=>{}}
         className='w-full rounded-full mt-5 p-6'
         variant='outline'
       >

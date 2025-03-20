@@ -24,7 +24,7 @@ model AiOutput {
 
 model UserSubscription{
     id           String      @id @default(auto()) @map("_id") @db.ObjectId
-    email        String
+    email        String      @unique
     username     String
     active       Boolean 
     paymentId    String

@@ -19,6 +19,7 @@ import { UpdateCreditUsageContext } from '@/app/(context)/UpdateCreditUsageConte
     useEffect(()=>{
         user&&GetData();
         user&&IsUserSubscribe();
+        console.log("kdkfsdkfbksbfbsdfbkdbfbskdfbksbdkfksdfbsdkfb")
     },[user]);
 
 
@@ -37,11 +38,8 @@ import { UpdateCreditUsageContext } from '@/app/(context)/UpdateCreditUsageConte
          {/* @ts-ignore */}
         const result=await axios.get("/api/userSubscription");
         console.log(result.data)
-        if(result.data.length>0)
-            {
-                setUserSubscription(true);
-                setMaxWords(1000000);
-            }
+                setUserSubscription(result.data.isSubscribed);
+                setMaxWords(result.data.maxWords);
     }
 
 

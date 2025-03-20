@@ -37,8 +37,6 @@ export async function GET(req: NextRequest) {
         if (!userId) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
-
-        // ✅ Fetch user email from Clerk API
         const user = await fetch(`https://api.clerk.dev/v1/users/${userId}`, {
             headers: {
                 Authorization: `Bearer ${process.env.CLERK_SECRET_KEY}`,
@@ -48,14 +46,10 @@ export async function GET(req: NextRequest) {
            if (!userEmail) {
                return NextResponse.json({ error: "User email not found" }, { status: 400 });
            }
-           
-
-        // ✅ Check if the user has an active subscription
         const subscription = await prisma.userSubscription.findFirst({
-            where: { email: user.primary_email_address, active: true },
+            where: { email: userEmail, active: true },
         });
-
-        // ✅ Return subscription status
+        console.log(subscription)
         return NextResponse.json({
             isSubscribed: !!subscription, // Convert to boolean
             maxWords: subscription ? 1000000 : 10000, // If subscribed, increase limit

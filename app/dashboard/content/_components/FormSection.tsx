@@ -9,13 +9,15 @@ import { Loader2Icon } from 'lucide-react';
 import { TotalUsageContext } from '@/app/(context)/TotalUsageContext';
 import { UserSubscriptionContext } from '@/app/(context)/UserSubscriptionContext';
 import { redirect } from "next/navigation";
-
+import { useRouter } from "next/navigation"; 
+import { showSuccessAlert, showErrorAlert, showConfirmAlert } from "@/utils/alert";
 interface PROPS {
     selectedTemplate?: TEMPLATE;
     userFormInput:any,
     loading:boolean
 }
 function FormSection({ selectedTemplate,userFormInput,loading }: PROPS) {
+    const router = useRouter(); 
     const {totalUsage,setTotalUsage}=useContext(TotalUsageContext)
     const {userSubscription,setUserSubscription}=useContext(UserSubscriptionContext);
 
@@ -29,9 +31,12 @@ function FormSection({ selectedTemplate,userFormInput,loading }: PROPS) {
     const onSubmit=(e:any)=>{
         e.preventDefault();
         if(userSubscription)
-        {if(totalUsage/1000000>1) {alert("Purchase Extra Credit");redirect("/dashboard/billing");}}
+        {if(totalUsage/1000000>1) {showErrorAlert("Subscription Required","Purchase Extra Credit");router.push("/dashboard/billing"); 
+            return;}
+        }
         else
-        {if(totalUsage/10000>1) {alert("Purchase Extra Credit");redirect("/dashboard/billing")}}
+        {if(totalUsage/10000>1) {showErrorAlert("Subscription Required","Purchase Extra Credit");router.push("/dashboard/billing"); 
+            return;}}
         userFormInput(formData)
     }
 
