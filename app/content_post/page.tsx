@@ -8,7 +8,7 @@ import { Loader2Icon } from 'lucide-react';
 import axios from "axios";
 const path = require("path");
 const CLIENT_ID = "1351411795877566";
-import { useRouter } from "next/navigation"; 
+import { useRouter } from "next/navigation";
 import { showSuccessAlert, showErrorAlert, showConfirmAlert } from "@/utils/alert";
 // const posts=
   // {
@@ -18,7 +18,6 @@ import { showSuccessAlert, showErrorAlert, showConfirmAlert } from "@/utils/aler
   //   hashtags: ["#mountainlife", "#mountainviews", "#naturephotography"]
   // },
 export default function InstagramPosts() {
-  const REDIRECT_URI=`${window.location.origin}/api/facebook/callback`;
    const router = useRouter(); 
    const [load, setload] = useState<boolean>(false);
    const [loading, setloading] = useState<boolean>(false);
@@ -27,12 +26,18 @@ export default function InstagramPosts() {
   const [businessId, setbusinessId] = useState("");
   const [access_Token, setaccess_Token] = useState("");
   const [selectedPost, setSelectedPost] = useState({imageUrl:"",caption:""});
-
+  const [REDIRECT_URI, setREDIRECT_URI] = useState<string>("");
   let posts;
   try{ posts =JSON.parse(decodeURIComponent(content)).posts;}
   catch
   { posts = [];}
-
+  useEffect(()=>{
+    const help=async ()=>{
+       const response = await axios.get("/api/getdomain");
+       setREDIRECT_URI(`${response.data.domainurl}/api/facebook/callback`)
+    }
+    help();
+  },[])
   const handleSelect = (post:any) => setSelectedPost(post);
   const mediapost=async ()=>
     {
@@ -80,6 +85,7 @@ console.log(posts)
           <strong>✅ Business ID:</strong> {businessId}
           <center>
           <Button
+          disabled={loading}
       className="bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 text-white 
                  text-lg font-semibold px-6 py-3 rounded-lg flex items-center gap-2 
                  hover:opacity-90 transition-all duration-300 shadow-lg"
@@ -105,7 +111,6 @@ console.log(posts)
           <div key={index} className="border rounded-lg overflow-hidden shadow-md bg-white">
             <img src={post.imageUrl} alt={post.title} className="w-full h-64 object-cover" />
             <div className="p-4">
-              <h2 className="text-lg font-semibold">{post.title}</h2>
               <p className="text-gray-700">{post.caption}</p>
               {/* <p className="text-blue-500 text-sm mt-2">{post.hashtags.join(" ")}</p> */}
               <button

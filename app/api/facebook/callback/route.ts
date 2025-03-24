@@ -6,6 +6,7 @@ const CLIENT_SECRET = "bb3872ff8f6d921dc1d96bc3f7241308";
 export async function GET(req:NextRequest, res:NextResponse)
 {   
     const REDIRECT_URI=`${req.nextUrl.origin}/api/facebook/callback`;
+    console.log(REDIRECT_URI);
     const { searchParams } = new URL(req.url);
     const authCode = searchParams.get("code");
     if (!authCode) {
@@ -26,7 +27,7 @@ export async function GET(req:NextRequest, res:NextResponse)
         const accessToken = tokenResponse.data.access_token;
         console.log("accessToken",accessToken);
 
-        const longlivedtoken=await axios.get(`/api/facebook/long-lived-token?access_token=${accessToken}`);
+        const longlivedtoken=await axios.get(`${req.nextUrl.origin}/api/facebook/long-lived-token?access_token=${accessToken}`);
         console.log("longlivedtoken",longlivedtoken.data.long_lived_access_token);
         const page= await axios.get(`https://graph.facebook.com/v19.0/me/accounts?access_token=${longlivedtoken.data.long_lived_access_token}`)
         const pageData = page.data.data[0]; // First page in the list
@@ -40,8 +41,7 @@ export async function GET(req:NextRequest, res:NextResponse)
         console.log("businessId",businessId)
         // Respond with the access token (or store it for future use)
         // return NextResponse.json({ access_Token_pageId,businessId });
-        const rootUrl = req.nextUrl.origin; 
-        return NextResponse.redirect(`${rootUrl}/content_post?businessId=${businessId}&access_Token=${access_Token_pageId}`);
+        return NextResponse.redirect(`${req.nextUrl.origin}/content_post?businessId=${businessId}&access_Token=${access_Token_pageId}`);
 
     } catch (error) {
         console.log(error);

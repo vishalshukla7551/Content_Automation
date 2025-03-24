@@ -1,6 +1,7 @@
 const OpenAI = require('openai');
 const fs = require("fs");
 const path = require("path");
+import axios from "axios";
 import sharp from "sharp";
 import { NextRequest, NextResponse } from "next/server";
 const client = new OpenAI({
@@ -10,10 +11,7 @@ const client = new OpenAI({
 export async function POST(req: NextRequest) {
   try {
     const { imagepath, prompt } = await req.json();
-    //in production use this 
-    const pathstore = path.join("/tmp", imagepath);
-    //in development use this
-    // const pathstore=path.join(process.cwd(), "public", imagepath);
+
     const response = await client.images.generate({
       model: "stability-ai/sdxl",
       response_format: "b64_json",
@@ -29,18 +27,22 @@ export async function POST(req: NextRequest) {
     });
 
     console.log("API Response:", response);
-    // 🔹 Extract the Base64 image
+  
     const base64Data = response.data[0].b64_json;
     console.log("buffer created")
     const imageBuffer  = Buffer.from(base64Data, "base64");
-     sharp(imageBuffer)
-     .toFormat("jpeg") // Ensure conversion to JPEG
-    .toFile(pathstore) // Save the output file
-   .then(() => console.log("Conversion successful: output.jpg"))
-    .catch((err) => console.error("Conversion failed:", err));
-    console.log(`✅ Image saved as ${imagepath}`);
+    const jpegBuffer = await sharp(imageBuffer)
+    .toFormat("jpeg")
+    .toBuffer();
+     console.log("jpeg Coverted")
+    
+     const imageurl=await axios.post(`${req.nextUrl.origin}/api/upload_image`,{    
+      imagepath: imagepath,
+      jpegBuffer:jpegBuffer
+  });
+  console.log("Get image url",imageurl.data.publicUrl)
 
-    return NextResponse.json({ success: true, imagePath: pathstore });
+    return NextResponse.json({ success: true, publicUrl: imageurl.data.publicUrl });
 
   } catch (error) {
     console.error("❌ Error:", error);

@@ -11,7 +11,7 @@ import { Instagram } from "lucide-react";
 import { usePathname } from 'next/navigation'
 import { chatSession } from '@/utils/AiModal'
 import { generateRandomString } from '@/utils/random_function'
-
+import Swal from "sweetalert2";
 import { useRouter } from "next/navigation"; 
 import { Loader2Icon } from 'lucide-react';
 import axios from "axios";
@@ -35,9 +35,20 @@ function OutputSection({aiOutput}:props) {
     setloading(true);
     let cleanedText;
     try{
+      Swal.fire({
+        title: "Initiate",
+        text: "Analysing Data...",
+        icon: "info",
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        didOpen: () => {
+            Swal.showLoading(); // Show loading spinner
+        }
+    });
       const AIPrompt =Prompt ;
   const FinalAIPrompt=JSON.stringify(content)+", "+AIPrompt;
     const result=await chatSession.sendMessage(FinalAIPrompt);
+    Swal.close();
       cleanedText = result?.response.text().trim().replace(/^```json|```$/g, "");
       const finaljson=cleanedText.posts;
       console.log("jsonwithout parse",cleanedText);
@@ -50,19 +61,39 @@ const updatedPosts = [];
 for (const [index, post] of parsedJson.posts.entries()) {
   const string=generateRandomString(10);
     try {
-        const response = await axios.post("/api/generateImage", {                //generate Image
+      
+      Swal.fire({
+        title: `Step ${(index+1)} of 3`,
+        text: `Processing Image ${index}...`,
+        icon: "info",
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        didOpen: () => {
+            Swal.showLoading(); // Show loading spinner
+        }
+    });
+        const imageUrl = await axios.post("/api/generateImage", {                //generate Image
             imagepath: `${string}.jpeg`,    
             prompt: post.image_des
-        });
-        const imageUrl = await axios.post("/api/upload_image", {                  //Upload Imgae to get  Public Url
-          imagePath: `${string}.jpeg`,
-      });
-      
-        console.log(response);
+        });      
+        console.log(imageUrl);
         updatedPosts.push({ ...post, imageUrl: imageUrl.data.publicUrl});
+        Swal.close();
     } catch (error) {
+      Swal.fire({
+        title: `Step ${(index+1)} of 3`,
+        text: `Processing Image ${index} Failed`,
+        icon: "info",
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        didOpen: () => {
+            Swal.showLoading(); // Show loading spinner
+        }
+    });
         console.error("Error generating image:", error);
+        Swal.close();
         updatedPosts.push({ ...post, imageUrl: "/placeholder.jpg" });
+      
     }
 }
     
@@ -90,6 +121,7 @@ cleanedText = JSON.stringify({posts:updatedPosts});
         load&&
         path===`/dashboard/content/instagram-post-generator`&&<>
         <Button
+        disabled={loading}
       className="bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 text-white 
                  text-lg font-semibold px-6 py-3 rounded-lg flex items-center gap-2 
                  hover:opacity-90 transition-all duration-300 shadow-lg"
