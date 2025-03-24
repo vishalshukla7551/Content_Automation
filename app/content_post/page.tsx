@@ -42,10 +42,6 @@ export default function InstagramPosts() {
   const mediapost=async ()=>
     {
       setloading(true);
-      // console.log(access_Token); 
-      // console.log(businessId);
-      // console.log(selectedPost.imageUrl); 
-      // console.log(selectedPost.caption)
       const response=await postToInstagram(access_Token,businessId,selectedPost.imageUrl,selectedPost.caption)
       if(response.status==1)
        {showErrorAlert("Required",response.message);}
@@ -54,7 +50,8 @@ export default function InstagramPosts() {
       else
       {showErrorAlert("Error",response.message);}
       setloading(false);
-      router.push("/dashboard/content/instagram-post-generator")
+      if(response.status==0)
+      {router.push("/dashboard/content/instagram-post-generator")}
     }
   useEffect(() => {
     let storedContent = searchParams.get("content") || localStorage.getItem("content") || "";
@@ -108,25 +105,34 @@ console.log(posts)
       </div>)}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {posts.map((post:any, index:any) => (
-          <div key={index} className="border rounded-lg overflow-hidden shadow-md bg-white">
-            <img src={post.imageUrl} alt={post.title} className="w-full h-64 object-cover" />
-            <div className="p-4">
-              <p className="text-gray-700">{post.caption}</p>
-              {/* <p className="text-blue-500 text-sm mt-2">{post.hashtags.join(" ")}</p> */}
-              <button
-                onClick={() => handleSelect(post)}
-                className="mt-2 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-              >
-                Select Post
-              </button>
-            </div>
+          <div key={index} className={`border rounded-lg overflow-hidden shadow-md bg-white transition-opacity ${
+            selectedPost.imageUrl  && selectedPost.imageUrl !== post.imageUrl ? "opacity-50" : "opacity-100"
+          }`}>
+           <div className="border rounded-lg overflow-hidden shadow-md bg-white h-full flex flex-col">
+  <img src={post.imageUrl} alt={post.title} className="w-full h-64 object-cover" />
+  <div className="p-4 flex flex-col flex-grow">
+    <p className="text-gray-700 flex-grow">{post.caption}</p>
+    <button
+      onClick={() => handleSelect(post)}
+      className={`mt-2 px-4 py-2 transition-colors ${
+        selectedPost.imageUrl === post.imageUrl
+          ? "bg-green-500 text-white cursor-not-allowed rounded-full"
+          : "bg-blue-500 text-white rounded-full"
+      }`}
+      disabled={selectedPost.imageUrl === post.imageUrl}
+    >
+      {selectedPost.imageUrl === post.imageUrl ? "Selected" : "Select Post"}
+    </button>
+  </div>
+</div>
+
           </div>
         ))}
       </div>
-      <h2 className="text-xl font-bold mt-6">Selected Posts (JSON Data)</h2>
+      {/* <h2 className="text-xl font-bold mt-6">Selected Posts (JSON Data)</h2>
       <pre className="bg-gray-200 p-4 rounded mt-2 text-sm overflow-auto">
-        {JSON.stringify(selectedPost, null, 2)}
-      </pre>
+        {JSON.stringify(selectedPost, null, 2)} 
+      </pre> */}
     </div>
   );
 }

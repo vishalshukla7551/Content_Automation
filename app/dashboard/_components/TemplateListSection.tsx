@@ -10,6 +10,7 @@ export interface TEMPLATE{
     slug:string,
     aiPrompt:string,
     form?:FORM[]
+    isSpecial?: number
 }
 
 export interface FORM{

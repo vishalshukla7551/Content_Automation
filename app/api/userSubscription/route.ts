@@ -2,11 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { getAuth } from "@clerk/nextjs/server";
 import prisma from "../../../lib/prisma.js"
 
-//  Create userSubscription
+
 export async function POST(req: NextRequest) {
     try {
-        const {email, username,active,paymentId,joinDate } = await req.json(); // Get paymentId from request body
-        const { userId } = getAuth(req); // Get authenticated user
+        const {email, username,active,paymentId,joinDate } = await req.json(); 
+        const { userId } = getAuth(req); 
 
         if (!userId) {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

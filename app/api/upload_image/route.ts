@@ -4,20 +4,17 @@ import fs from "fs";
 import FormData from "form-data";
 import path from "path";
 
-const CLOUD_NAME = "dizhnvety"; // Replace with your Cloudinary cloud name
-const API_KEY = "938992545161844"; // Replace with your API Key
-const API_SECRET = "068zjxzUARYbrev8XlXlnJj4NRc"; // Replace with your API Secret
-
+const CLOUD_NAME = "dizhnvety"; 
 
 export async function POST(req: NextRequest) {
     try {
-        // Parse JSON request body
+      
         const {imagepath, jpegBuffer } = await req.json();
         if (!jpegBuffer) {
             return NextResponse.json({ error: "Missing jpegBuffer in request body" }, { status: 400 });
         }
 
-        // Prepare FormData
+      
         const formData = new FormData();
         formData.append("file", Buffer.from(jpegBuffer, "base64"), {
           filename: imagepath, 

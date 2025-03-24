@@ -1,5 +1,24 @@
 export default  [
     {
+        name: 'Instagram Post Generator',
+        desc: 'An AI tool that serves as your personal blog post title writer, generating catchy and viral-worthy titles in your chosen language and also post it into your Instagram Account.',
+        icon: 'https://cdn-icons-png.flaticon.com/128/15713/15713420.png',
+        category: 'blog',
+       
+        slug: 'instagram-post-generator',
+        aiPrompt: 'Generate 3 Instagram post depends on a given keywords and give output in rich text editor format',
+        form: [
+            {
+                label: 'Enter Keywords for your post',
+                field: 'input',
+                name: 'keywords',
+                required:true
+            },
+           
+        ],
+        isSpecial:1
+    },
+    {
         name:'Blog Title',
         desc:'An AI tool that generate blog title depends on yout blog information',
         category:'Blog',
@@ -171,24 +190,6 @@ export default  [
                 name: 'outline',
                 required:true
             }
-        ]
-    },
-    {
-        name: 'Instagram Post Generator',
-        desc: 'An AI tool that serves as your personal blog post title writer, generating catchy and viral-worthy titles in your chosen language.',
-        icon: 'https://cdn-icons-png.flaticon.com/128/15713/15713420.png',
-        category: 'blog',
-       
-        slug: 'instagram-post-generator',
-        aiPrompt: 'Generate 3 Instagram post depends on a given keywords and give output in rich text editor format',
-        form: [
-            {
-                label: 'Enter Keywords for your post',
-                field: 'input',
-                name: 'keywords',
-                required:true
-            },
-           
         ]
     },
     {
