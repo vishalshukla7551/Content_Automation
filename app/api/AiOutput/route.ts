@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "../../../lib/prisma.js"
 import { getAuth } from "@clerk/nextjs/server";
 
+// Create AiOutput
 export async function POST(req: NextRequest) {
     const { userId } = getAuth(req);
     if (!userId) {
@@ -29,6 +30,7 @@ export async function POST(req: NextRequest) {
     }
 }
 
+// Get AiOutput
 export async function GET(req: NextRequest) {
     const { userId } = getAuth(req);
     if (!userId) {

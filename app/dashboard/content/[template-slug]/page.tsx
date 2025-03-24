@@ -40,12 +40,6 @@ function CreateNewContent(props:PROPS) {
      * @returns 
      */
     const GenerateAIContent=async(formData:any)=>{
-        // if(totalUsage>=10000&&!userSubscription)
-        //     {
-        //         console.log("Please Upgrade");
-        //         router.push('/dashboard/billing')
-        //         return ;
-        //     }
         setLoading(true);
         const SelectedPrompt=selectedTemplate?.aiPrompt;
         const FinalAIPrompt=JSON.stringify(formData)+", "+SelectedPrompt;
@@ -59,7 +53,7 @@ function CreateNewContent(props:PROPS) {
     }
 
     const SaveInDb=async(formData:any,templateSlug:any,aiResponse:string)=>{
-        const response = await axios.post("/api/ai",
+        const response = await axios.post("/api/AiOutput",
         {
                 formData,
                 templateSlug,

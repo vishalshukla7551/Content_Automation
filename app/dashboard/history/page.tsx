@@ -28,7 +28,7 @@ function History() {
     async function fetchHistory() {
         
       try {
-        const response = await axios.get("/api/ai");
+        const response = await axios.get("/api/AiOutput");
         setHistoryList(response.data); // ✅ Update state
         setLoading(false);
       } catch (error) {

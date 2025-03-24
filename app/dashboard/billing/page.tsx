@@ -59,9 +59,15 @@ function billing() {
             SaveSubcription(resp?.razorpay_payment_id)
           }
         setLoading(false);
-      }
+      },
+      modal: {
+        escape: true, // Allow closing with 'Esc' key
+        ondismiss: () => {
+          console.log("Razorpay window closed without payment");
+          setLoading(false); // ✅ Reset loading when Razorpay is closed
+        },
+      },
     }
- 
     // @ts-ignore 
     const rzp=new window.Razorpay(options);
     rzp.open();

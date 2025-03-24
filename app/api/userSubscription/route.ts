@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAuth } from "@clerk/nextjs/server";
 import prisma from "../../../lib/prisma.js"
-import moment from "moment";
 
+//  Create userSubscription
 export async function POST(req: NextRequest) {
     try {
         const {email, username,active,paymentId,joinDate } = await req.json(); // Get paymentId from request body
@@ -30,6 +30,7 @@ export async function POST(req: NextRequest) {
     }
 }
 
+// Get userSubscription
 export async function GET(req: NextRequest) {
     try {
         const { userId } = getAuth(req); // ✅ Get the authenticated user

@@ -29,7 +29,7 @@ import { UpdateCreditUsageContext } from '@/app/(context)/UpdateCreditUsageConte
 
     const GetData=async()=>{
          {/* @ts-ignore */}
-        const result=await axios.get("/api/ai")
+        const result=await axios.get("/api/AiOutput")
         
         GetTotalUsage(result.data)
     }
