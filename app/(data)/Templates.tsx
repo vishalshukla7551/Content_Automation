@@ -19,6 +19,28 @@ export default  [
         isSpecial:1
     },
     {
+
+        name: 'Youtube Description',
+        desc: 'An AI tool that serves as your personal blog post title writer, generating catchy and viral-worthy titles in your chosen language.',
+        category: 'Youtube Tool',
+        icon: 'https://cdn-icons-png.flaticon.com/128/2111/2111748.png',
+        slug: 'youtube-description',
+        aiPrompt: 'Generate Youtube description with emoji under 4-5 lines based on topic and outline in rich text editor format',
+        form: [
+            {
+                label: 'Enter your blog topic/title',
+                field: 'input',
+                name: 'topic',
+                required:true
+            },
+            {
+                label: 'Enter youtube Outline here',
+                field: 'textarea',
+                name: 'outline'
+            }
+        ]
+    },
+    {
         name:'Blog Title',
         desc:'An AI tool that generate blog title depends on yout blog information',
         category:'Blog',
@@ -98,28 +120,6 @@ export default  [
             }
         ]
 
-    },
-    {
-
-        name: 'Youtube Description',
-        desc: 'An AI tool that serves as your personal blog post title writer, generating catchy and viral-worthy titles in your chosen language.',
-        category: 'Youtube Tool',
-        icon: 'https://cdn-icons-png.flaticon.com/128/2111/2111748.png',
-        slug: 'youtube-description',
-        aiPrompt: 'Generate Youtube description with emoji under 4-5 lines based on topic and outline in rich text editor format',
-        form: [
-            {
-                label: 'Enter your blog topic/title',
-                field: 'input',
-                name: 'topic',
-                required:true
-            },
-            {
-                label: 'Enter youtube Outline here',
-                field: 'textarea',
-                name: 'outline'
-            }
-        ]
     },
     {
         name: 'Youtube Tags',

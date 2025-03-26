@@ -24,6 +24,7 @@
     "dom": "^0.0.3",
     "dotenv": "^16.4.7",
     "drizzle-orm": "^0.31.4",
+    "framer-motion": "^12.6.0",
     "fs": "^0.0.1-security",
     "lucide-react": "^0.395.0",
     "marked": "^15.0.7",

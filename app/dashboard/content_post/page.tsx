@@ -13,13 +13,7 @@ const path = require("path");
 const CLIENT_ID = "1351411795877566";
 import { useRouter } from "next/navigation";
 import { showSuccessAlert, showErrorAlert, showConfirmAlert } from "@/utils/alert";
-// const posts=
-  // {
-  //   title: "Majestic Mountain Landscape",
-  //   image_des: "A stunning panoramic view of a mountain range at sunrise or sunset.",
-  //   caption: "Lost in the majesty of the mountains. ✨",
-  //   hashtags: ["#mountainlife", "#mountainviews", "#naturephotography"]
-  // },
+
 export default function InstagramPosts() {
    const router = useRouter(); 
    const [load, setload] = useState<boolean>(false);
@@ -38,6 +32,7 @@ export default function InstagramPosts() {
     const help=async ()=>{
        const response = await axios.get("/api/getdomain");
        setREDIRECT_URI(`${response.data.domainurl}/api/facebook/callback`)
+       console.log(response);
     }
     help();
   },[])
@@ -78,19 +73,20 @@ export default function InstagramPosts() {
 console.log(posts)
 
   return (
-      <>
-    <div className="flex items-center justify-between w-full p-4">
-      <Link href={"/dashboard/content/instagram-post-generator"}>
-        <Button className="flex items-center"> 
-          <ArrowLeft/> Back
-        </Button>
-      </Link> 
-      <h1 className="text-2xl font-bold text-center flex-1">Instagram Post Templates</h1> 
-      <div className="w-16"></div> 
-       </div>
-    
-    
-            <div className="p-6 max-w-4xl mx-auto">
+
+  <>
+<div className="flex items-center justify-between w-full p-4">
+  <Link href={"/dashboard/content/instagram-post-generator"}>
+    <Button className="flex items-center"> 
+      <ArrowLeft/> Back
+    </Button>
+  </Link> 
+  <h1 className="text-2xl font-bold text-center flex-1">Instagram Post Templates</h1> 
+  <div className="w-16"></div> 
+   </div>
+
+
+        <div className="p-6 max-w-4xl mx-auto">
       {load ? (
         <div className="mb-4 p-4 bg-green-100 text-green-800 rounded-lg text-center">
           <strong>✅ Business ID:</strong> {businessId}
@@ -148,7 +144,8 @@ console.log(posts)
         {JSON.stringify(selectedPost, null, 2)} 
       </pre> */}
     </div>
-    </>
+   </>
+     
   );
 }
 

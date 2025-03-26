@@ -64,7 +64,7 @@ for (const [index, post] of parsedJson.posts.entries()) {
       
       Swal.fire({
         title: `Step ${(index+1)} of 3`,
-        text: `Processing Image ${index}...`,
+        text: `Processing Image ${(index+1)}...`,
         icon: "info",
         allowOutsideClick: false,
         showConfirmButton: false,
@@ -128,7 +128,7 @@ cleanedText = JSON.stringify({posts:updatedPosts});
                  onClick={jsongenerator}
     >
       <Instagram size={20} />
-      Post to Instagram
+      Generate Post By This Content
       {loading&&<Loader2Icon className='animate-spin'/>}
     </Button>
     </>
