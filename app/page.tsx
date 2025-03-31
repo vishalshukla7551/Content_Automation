@@ -11,6 +11,16 @@ const slides = [
     image: "/ai-content-1.png"
   },
   {
+    title: "Effortless Instagram Auto Posting",
+    text: "Schedule and publish your Instagram posts automatically with precision. Boost engagement, maintain consistency, and grow your audience—without manual effort.",
+    image: "/instagram-auto-posting.png"
+  },
+  {
+    title: "Seamless LinkedIn Auto Posting",
+    text: "Enhance your professional presence with automated LinkedIn posts. Share industry insights, updates, and articles effortlessly while maximizing visibility and engagement.",
+    image: "/linkedin-auto-posting.png"
+  },
+  {
     title: "Generate Engaging Content Instantly",
     text: "Create blog posts, ads, social media captions, and more with ease.",
     image: "/ai-content-2.jpg"

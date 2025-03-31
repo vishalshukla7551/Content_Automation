@@ -41,7 +41,10 @@ export async function GET(req:NextRequest, res:NextResponse)
         console.log("businessId",businessId)
         // Respond with the access token (or store it for future use)
         // return NextResponse.json({ access_Token_pageId,businessId });
-        return NextResponse.redirect(`${req.nextUrl.origin}/content_post?businessId=${businessId}&access_Token=${access_Token_pageId}`);
+        const instauserinfo = await axios.get(`https://graph.facebook.com/v19.0/${businessId}?fields=id,username,media_count,profile_picture_url&access_token=${access_Token_pageId}`);
+        console.log("✅ Instagram Profile Data:", instauserinfo.data);
+        const cleanedText = JSON.stringify(instauserinfo.data);
+        return NextResponse.redirect(`${req.nextUrl.origin}/content_post?businessId=${businessId}&access_Token=${access_Token_pageId}&instauserinfo=${encodeURIComponent(cleanedText)}`);
 
     } catch (error) {
         console.log(error);

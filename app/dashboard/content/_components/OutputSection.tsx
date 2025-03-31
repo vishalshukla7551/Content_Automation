@@ -2,153 +2,88 @@
 import React, { useEffect, useRef } from 'react'
 import { Copy } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import {Prompt} from '@/app/(data)/prompt'
+import {Prompt,Prompt1} from '@/app/(data)/prompt'
 import dynamic from "next/dynamic";
 import "react-quill/dist/quill.snow.css";
 import { marked } from "marked";
 import { useState } from "react";
-import { Instagram } from "lucide-react";
+import { Instagram,Linkedin } from "lucide-react";
 import { usePathname } from 'next/navigation'
-import { chatSession } from '@/utils/AiModal'
-import { generateRandomString } from '@/utils/random_function'
-import Swal from "sweetalert2";
+import {jsoninsta,jsonlinkedin} from '@/utils/random_function'
 import { useRouter } from "next/navigation"; 
 import { Loader2Icon } from 'lucide-react';
-import axios from "axios";
+import { FaLinkedin } from "react-icons/fa";
+
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
-interface props{
-  aiOutput:string;
+
+interface Props {
+  aiOutput: string;
 }
-function OutputSection({aiOutput}:props) {
+
+function OutputSection({ aiOutput }: Props) {
+  const [content, setContent] = useState(aiOutput);
+  const [isMounted, setIsMounted] = useState(false);
   const [loading, setloading] = useState<boolean>(false);
   const router = useRouter(); 
   const path=usePathname();
   console.log(path)
-  const [content, setContent] = useState(aiOutput);
   const [load, setload] = useState<boolean>(false);
   const [jsondata,setjsondata]=useState<string>("");
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   useEffect(() => {
     setContent(aiOutput);
   }, [aiOutput]);
 
-  async function jsongenerator(){
-    setloading(true);
-    let cleanedText;
-    try{
-      Swal.fire({
-        title: "Initiate",
-        text: "Analysing Data...",
-        icon: "info",
-        allowOutsideClick: false,
-        showConfirmButton: false,
-        didOpen: () => {
-            Swal.showLoading(); // Show loading spinner
-        }
-    });
-      const AIPrompt =Prompt ;
-  const FinalAIPrompt=JSON.stringify(content)+", "+AIPrompt;
-    const result=await chatSession.sendMessage(FinalAIPrompt);
-    Swal.close();
-      cleanedText = result?.response.text().trim().replace(/^```json|```$/g, "");
-      const finaljson=cleanedText.posts;
-      console.log("jsonwithout parse",cleanedText);
-// const jsonData = JSON.parse(cleanedText);
-
-const parsedJson = JSON.parse(cleanedText);
-console.log("Parsed JSON Output:", parsedJson);
-const updatedPosts = [];
-    
-for (const [index, post] of parsedJson.posts.entries()) {
-  const string=generateRandomString(10);
-    try {
-      
-      Swal.fire({
-        title: `Step ${(index+1)} of 3`,
-        text: `Processing Image ${(index+1)}...`,
-        icon: "info",
-        allowOutsideClick: false,
-        showConfirmButton: false,
-        didOpen: () => {
-            Swal.showLoading(); // Show loading spinner
-        }
-    });
-        const imageUrl = await axios.post("/api/generateImage", {                //generate Image
-            imagepath: `${string}.jpeg`,    
-            prompt: post.image_des
-        });      
-        console.log(imageUrl);
-        updatedPosts.push({ ...post, imageUrl: imageUrl.data.publicUrl});
-        Swal.close();
-    } catch (error) {
-      Swal.fire({
-        title: `Step ${(index+1)} of 3`,
-        text: `Processing Image ${index} Failed`,
-        icon: "info",
-        allowOutsideClick: false,
-        showConfirmButton: false,
-        didOpen: () => {
-            Swal.showLoading(); // Show loading spinner
-        }
-    });
-        console.error("Error generating image:", error);
-        Swal.close();
-        updatedPosts.push({ ...post, imageUrl: "/placeholder.jpg" });
-      
-    }
-}
-    
-// ✅ Stringify JSON before encoding it for URL
-cleanedText = JSON.stringify({posts:updatedPosts});
-    
-    console.log("Event")
+  if (!isMounted) {
+    return <div className="bg-white shadow-lg border rounded-lg h-full min-h-screen flex flex-col p-5">Loading...</div>;
   }
-    catch(error){
-      console.log("Error in creating Proper organised formate");}
-      finally{
-        console.log("ok");
-        router.push(`/content_post?content=${encodeURIComponent(cleanedText)}`)
-        setloading(false);
-      }
-      }
-    
 
   return (
-    
-    <div className='bg-white shadow-lg border rounded-lg'>
-      <div className='flex justify-between items-center p-5'>
-        <h2 className='font-medium text-lg'>Your Result</h2>
+    <div className="bg-white shadow-lg border rounded-lg h-full min-h-screen flex flex-col">
+      {/* Header Section */}
+      <div className="flex justify-between items-center p-5">
+        <h2 className="font-medium text-lg">Your Result</h2>
         {
         load&&
-        path===`/dashboard/content/instagram-post-generator`&&<>
+        (path===`/dashboard/content/instagram-post-generator`)&&<>
         <Button
         disabled={loading}
       className="bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 text-white 
                  text-lg font-semibold px-6 py-3 rounded-lg flex items-center gap-2 
                  hover:opacity-90 transition-all duration-300 shadow-lg"
-                 onClick={jsongenerator}
+                 onClick={()=>{jsoninsta(Prompt,setloading,content,router)}}
     >
       <Instagram size={20} />
       Generate Post By This Content
       {loading&&<Loader2Icon className='animate-spin'/>}
     </Button>
     </>
+}
+{
+    load&&(path===`/dashboard/content/linkedin-post-generator`)&& <Button
+            onClick={()=>{jsonlinkedin(Prompt1,setloading,content,router)}}
+            className="bg-blue-700 hover:bg-blue-800 text-white font-medium px-5 py-2 rounded-lg flex items-center gap-2 transition-all duration-300"
+        ><Linkedin className="w-5 h-5" />Generate Post By This Content</Button>
   }
-        <Button className='flex gap-2'
-        onClick={()=>navigator.clipboard.writeText(content)}
-        ><Copy className='w-4 h-4'/> Copy </Button>
+        <Button className="flex gap-2" onClick={() => navigator.clipboard.writeText(content)}>
+          <Copy className="w-4 h-4" /> Copy
+        </Button>
       </div>
-            <ReactQuill
+
+      {/* ReactQuill Editor */}
+      <ReactQuill
         value={marked.parse(content)}
-        theme="snow" // WYSIWYG Theme
+        theme="snow"
         placeholder="Type something..."
-        onChange={(data)=>{setContent(data),setload(true);}}
-        style={{
-          height: "600px", // Set editor height
-          overflowY: "auto", // Enable vertical scrolling
-        }}
+        onChange={(data) => {setContent(data);setload(true);}}
+        className="flex-1 h-[calc(100vh-150px)] overflow-hidden"
       />
     </div>
-  )
+  );
 }
 
 export default OutputSection;

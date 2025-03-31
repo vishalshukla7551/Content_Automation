@@ -1,78 +1,80 @@
-"use client"
-import { Button } from '@/components/ui/button'
+"use client";
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { useUser } from '@clerk/nextjs';
+import { useUser } from "@clerk/nextjs";
 import axios from "axios";
-import React, { useContext, useEffect, useState } from 'react'
-import { HISTORY } from '../history/page';
-import { TotalUsageContext } from '@/app/(context)/TotalUsageContext';
-import { UserSubscriptionContext } from '@/app/(context)/UserSubscriptionContext';
-import { UpdateCreditUsageContext } from '@/app/(context)/UpdateCreditUsageContext';
+import React, { useContext, useEffect, useState } from "react";
+import { HISTORY } from "../history/page";
+import { TotalUsageContext } from "@/app/(context)/TotalUsageContext";
+import { UserSubscriptionContext } from "@/app/(context)/UserSubscriptionContext";
+import { UpdateCreditUsageContext } from "@/app/(context)/UpdateCreditUsageContext";
 
- function UsageTrack() {
+function UsageTrack() {
+  const { user } = useUser();
+  const { totalUsage, setTotalUsage } = useContext(TotalUsageContext);
+  const { userSubscription, setUserSubscription } = useContext(UserSubscriptionContext);
+  const { updateCreditUsage, setUpdateCreditUsage } = useContext(UpdateCreditUsageContext);
+  const [maxWords, setMaxWords] = useState(10000);
 
-    const {user}=useUser();
-    const {totalUsage,setTotalUsage}=useContext(TotalUsageContext)
-    const {userSubscription,setUserSubscription}=useContext(UserSubscriptionContext);
-    const [maxWords,setMaxWords]=useState(10000)
-    const {updateCreditUsage,setUpdateCreditUsage}=useContext(UpdateCreditUsageContext);
-    useEffect(()=>{
-        user&&GetData();
-        user&&IsUserSubscribe();
-        console.log("kdkfsdkfbksbfbsdfbkdbfbskdfbksbdkfksdfbsdkfb")
-    },[user]);
-
-
-    useEffect(()=>{
-        user&&GetData();
-    },[updateCreditUsage]);
-
-    const GetData=async()=>{
-         {/* @ts-ignore */}
-        const result=await axios.get("/api/AiOutput")
-        
-        GetTotalUsage(result.data)
+  useEffect(() => {
+    if (user) {
+      GetData();
+      IsUserSubscribe();
     }
+  }, [user]);
 
-    const IsUserSubscribe=async()=>{
-         {/* @ts-ignore */}
-        const result=await axios.get("/api/userSubscription");
-        console.log(result.data)
-                setUserSubscription(result.data.isSubscribed);
-                setMaxWords(result.data.maxWords);
+  useEffect(() => {
+    if (user) {
+      GetData();
     }
+  }, [updateCreditUsage]);
 
+  const GetData = async () => {
+    const result = await axios.get("/api/AiOutput");
+    GetTotalUsage(result.data);
+  };
 
+  const IsUserSubscribe = async () => {
+    const result = await axios.get("/api/userSubscription");
+    setUserSubscription(result.data.isSubscribed);
+    setMaxWords(result.data.maxWords);
+  };
 
-    const GetTotalUsage=(result:HISTORY[])=>{
-        let total:number=0;
-        result.forEach(element => {
-            total=total+Number(element.aiResponse?.length) 
-        });
+  const GetTotalUsage = (result: HISTORY[]) => {
+    let total = 0;
+    result.forEach((element) => {
+      total = total + Number(element.aiResponse?.length);
+    });
 
-        setTotalUsage(total)
-        console.log(total);
-    }
+    setTotalUsage(total);
+  };
 
+  // Progress Bar Color Logic
+  const progressPercentage = Math.min((totalUsage / maxWords) * 100, 100);
+  const progressColor = progressPercentage > 80 ? "bg-red-500" : "bg-green-500"; // Turns red when usage is high
 
   return (
-    <div className='m-5'>
-        <div className='bg-primary text-white p-3 rounded-lg'>
-            <h2 className='font-medium'>Credits</h2>
-            <div className='h-2 bg-[#9981f9] w-full rounded-full mt-3'>
-                <div className='h-2 bg-white rounded-full'
-                style={{
-                    width:totalUsage/maxWords>1?100+"%":(totalUsage/maxWords)*100+"%"
-                }}
-                ></div>
-            </div>
-            <h2 className='text-sm my-2'>{totalUsage}/{maxWords} credit used</h2>
-        </div>
-        <Link href="/dashboard/billing">
-        <Button variant={'secondary'} className='w-full my-3 text-primary'>Upgrade</Button>
-        </Link>
+    <div className="p-4 bg-gradient-to-r from-gray-900 to-gray-800 rounded-xl shadow-lg text-white">
+      {/* Credits Section */}
+      <h2 className="font-semibold text-lg">Usage Credits</h2>
+      
+      {/* Progress Bar */}
+      <div className="relative w-full h-3 bg-gray-700 rounded-full mt-3">
+        <div
+          className={`h-3 rounded-full transition-all duration-500 ${progressColor}`}
+          style={{ width: `${progressPercentage}%` }}
+        ></div>
+      </div>
+      <p className="text-sm mt-2 text-gray-300">{totalUsage} / {maxWords} credits used</p>
+
+      {/* Upgrade Button */}
+      <Link href="/dashboard/billing">
+        <Button className="w-full mt-3 bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 rounded-lg">
+          Upgrade Plan
+        </Button>
+      </Link>
     </div>
-  )
+  );
 }
 
-export default UsageTrack
+export default UsageTrack;

@@ -1,24 +1,34 @@
-import { Search } from 'lucide-react'
-import React from 'react'
+import { Search } from "lucide-react";
+import React from "react";
 
-function SearchSection({onSearchInput}:any) {
+function SearchSection({ onSearchInput }: any) {
   return (
-    <div className='p-10 bg-gradient-to-br from-purple-500 via-purple-700 
-    to-blue-600 flex flex-col justify-center items-center text-white'>
-        <h2 className='text-3xl font-bold'>Browse All Templates</h2>
-        <p>What would you like to create today?</p>
-        <div className='w-full  flex justify-center'>
-            <div className='flex gap-2 items-center
-             p-2 border rounded-md bg-white my-5 w-[50%]'>
-                <Search className='text-primary' />
-                <input type="text" placeholder='Search'
-                onChange={(event)=>onSearchInput(event.target.value)}
-                className='bg-transparent w-full outline-none text-black'
-                />
-            </div>
-        </div>
+    <div className="relative w-full flex flex-col items-center justify-center p-12 bg-gradient-to-br from-blue-900 via-gray-800 to-black text-white">
+      {/* Frosted Glass Effect */}
+      <div className="absolute inset-0 bg-white/10 backdrop-blur-md rounded-xl w-full h-full"></div>
+
+      {/* Content */}
+      <div className="relative z-10 text-center">
+        <h2 className="text-4xl font-extrabold tracking-wide">Find Your Perfect Template</h2>
+        <p className="text-lg opacity-80 mt-2">What would you like to create today?</p>
+
+        {/* Search Bar */}
+        <div className="w-full flex justify-center mt-6">
+  <div className="flex items-center gap-2 p-3 border border-gray-400 bg-white/10 backdrop-blur-md rounded-full shadow-lg w-[80%] max-w-xl transition-all hover:bg-white/20">
+    <Search className="text-gray-300" />
+    <input
+      type="text"
+      placeholder="Search templates..."
+      onChange={(event) => onSearchInput(event.target.value)}
+      className="bg-transparent w-full outline-none text-white placeholder-gray-400"
+    />
+  </div>
+</div>
+
+
+      </div>
     </div>
-  )
+  );
 }
 
-export default SearchSection
+export default SearchSection;

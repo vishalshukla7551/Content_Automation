@@ -19,6 +19,28 @@ export default  [
         isSpecial:1
     },
     {
+        name: "LinkedIn Post Generator",
+        desc: "An AI-powered tool that helps generate engaging LinkedIn posts tailored to your professional audience.",
+        category: "LinkedIn Tool",
+        icon: "https://cdn-icons-png.flaticon.com/128/145/145807.png",
+        slug: "linkedin-post-generator",
+        aiPrompt: "Generate 3 professional LinkedIn posts based on given keywords and provide output in rich text editor format",
+        form: [
+            {
+                label: "Enter Keywords for your post",
+                field: "input",
+                name: "keywords",
+                required: true
+            },
+            {
+                label: "Enter your industry (optional)",
+                field: "input",
+                name: "industry"
+            }
+        ],
+        isSpecial: 1
+    },
+    {
 
         name: 'Youtube Description',
         desc: 'An AI tool that serves as your personal blog post title writer, generating catchy and viral-worthy titles in your chosen language.',

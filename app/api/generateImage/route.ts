@@ -10,7 +10,7 @@ const client = new OpenAI({
 });
 export async function POST(req: NextRequest) {
   try {
-    const { imagepath, prompt } = await req.json();
+    const { imagepath, prompt} = await req.json();
 
     const response = await client.images.generate({
       model: "stability-ai/sdxl",
@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
       prompt: prompt,
     });
 
-    console.log("API Response:", response);
+    console.log("GET image Model Data");
   
     const base64Data = response.data[0].b64_json;
     console.log("buffer created")
@@ -35,7 +35,6 @@ export async function POST(req: NextRequest) {
     .toFormat("jpeg")
     .toBuffer();
      console.log("jpeg Coverted")
-    
      const imageurl=await axios.post(`${req.nextUrl.origin}/api/upload_image`,{    
       imagepath: imagepath,
       jpegBuffer:jpegBuffer

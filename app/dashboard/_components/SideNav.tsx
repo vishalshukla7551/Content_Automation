@@ -1,67 +1,55 @@
-"use client"
-import { FileClock, Home, Settings, WalletCards } from 'lucide-react'
-import Image from 'next/image'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import React, { useEffect } from 'react'
-import UsageTrack from './UsageTrack'
+"use client";
+import { FileClock, Home, Settings, WalletCards } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import React from "react";
+import UsageTrack from "./UsageTrack";
 
 function SideNav() {
+  const MenuList = [
+    { name: "Home", icon: Home, path: "/dashboard" },
+    { name: "History", icon: FileClock, path: "/dashboard/history" },
+    { name: "Billing", icon: WalletCards, path: "/dashboard/billing" },
+    { name: "Settings", icon: Settings, path: "/dashboard/settings" },
+  ];
 
-    const MenuList=[
-        {
-            name:'Home',
-            icon:Home,
-            path:'/dashboard'
-        },
-        {
-            name:'History',
-            icon:FileClock,
-            path:'/dashboard/history'
-        },
-        {
-            name:'Billing',
-            icon:WalletCards,
-            path:'/dashboard/billing'
-        },
-        {
-            name:'Setting',
-            icon:Settings,
-            path:'/dashboard/settings'
-        },
-
-    ]
-
-    const path=usePathname();
-    useEffect(()=>{
-        console.log(path)
-    },[])
+  const path = usePathname();
 
   return (
-    <div className='h-screen relative p-5 shadow-sm border bg-white'>
-        <div className='flex justify-center'>
-        <Image src={'/logo.png'} alt='logo' width={`100`} height={`40`} className="w-30 h-18 mask rounded-xl"/>
-        </div>
-        <hr className='my-6 border' />
-        <div className='mt-3'>
-            {MenuList.map((menu,index)=>(
-                <Link key={index} href={menu.path}>
-                    <div className={`flex gap-2 mb-2 p-3
-                    hover:bg-primary hover:text-white rounded-lg
-                    cursor-pointer items-center
-                    ${path==menu.path&&'bg-primary text-white'}
-                    `}>
-                        <menu.icon className='h-6 w-6'/>
-                        <h2 className='text-lg'>{menu.name}</h2>
-                    </div>
-                </Link>
-            ))}
-        </div>
-        <div className='absolute bottom-10 left-0 w-full'>
-            <UsageTrack/>
-        </div>
+    <div className="h-screen w-64 bg-gradient-to-b from-gray-900 via-gray-800 to-black 
+      text-white shadow-lg border-r border-gray-700 p-6 flex flex-col">
+      
+      {/* Logo */}
+      <div className="flex justify-center mb-6">
+        <Image src={"/logo.png"} alt="logo" width={100} height={40} className="rounded-xl" />
+      </div>
+
+      <hr className="border-gray-700 opacity-50" />
+
+      {/* Navigation Links */}
+      <nav className="mt-6 flex flex-col gap-2">
+        {MenuList.map((menu, index) => (
+          <Link key={index} href={menu.path}>
+            <div
+              className={`flex gap-3 items-center px-4 py-3 rounded-lg 
+              transition-all duration-300 cursor-pointer hover:bg-white/10
+              ${path === menu.path ? "bg-white/20 text-blue-400" : "text-gray-300"}
+              `}
+            >
+              <menu.icon className="h-6 w-6" />
+              <h2 className="text-lg">{menu.name}</h2>
+            </div>
+          </Link>
+        ))}
+      </nav>
+
+      {/* Usage Track (Always at Bottom) */}
+      <div className="mt-auto">
+        <UsageTrack />
+      </div>
     </div>
-  )
+  );
 }
 
-export default SideNav
+export default SideNav;

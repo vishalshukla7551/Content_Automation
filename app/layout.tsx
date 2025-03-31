@@ -19,7 +19,13 @@ export default function RootLayout({
   return (
     <ClerkProvider>
     <html lang="en">
-      <body className={inter.className}>{children}<Footer/></body>
+      <body className={inter.className}>{children}
+        
+      <footer className="w-full bg-gray-900 shadow-md p-4 mt-auto">
+        <Footer />
+      </footer>
+        
+        </body>
     </html>
     </ClerkProvider>
   );
