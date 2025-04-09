@@ -22,7 +22,7 @@ function SideNav() {
       
       {/* Logo */}
       <div className="flex justify-center mb-6">
-        <Image src={"/logo.png"} alt="logo" width={100} height={40} className="rounded-xl" />
+        <Image src={"/logo-circle.png"} alt="logo" width={100} height={40} className="rounded-xl" />
       </div>
 
       <hr className="border-gray-700 opacity-50" />
