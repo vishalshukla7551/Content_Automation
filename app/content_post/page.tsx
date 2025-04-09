@@ -143,11 +143,13 @@ return (
            {/* Instagram Post Feed */}
     <div className="w-full flex justify-center gap-6 flex-nowrap">
         {posts.map((post: any, index: any) => (
-            <div
-                key={index}
-                className="rounded-lg overflow-hidden bg-white text-black shadow-lg border border-gray-300 transition-opacity flex flex-col"
-                style={{ width: "400px", flex: "0 0 auto" }} // Fixed size, prevents shrinking
-            >
+           <div
+           key={index}
+           className={`rounded-lg overflow-hidden bg-white text-black shadow-lg border border-gray-300 transition-opacity flex flex-col ${
+             selectedPost.imageUrl && selectedPost.imageUrl !== post.imageUrl ? "opacity-40" : "opacity-100"
+           }`}
+           style={{ width: "400px", flex: "0 0 auto" }}
+       >
                 {/* Post Header */}
                 <div className="flex items-center justify-between p-4">
                     <div className="flex items-center gap-3">

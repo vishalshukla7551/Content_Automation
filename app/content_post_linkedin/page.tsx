@@ -140,7 +140,9 @@ console.log(posts)
                     <div
                         key={index}
                         className={`rounded-lg overflow-hidden bg-white text-black shadow-lg border border-gray-300 transition-opacity flex flex-col 
-                            ${isExpanded ? "h-auto" : "h-[800px]"}`} // Fixed height initially, expands on click
+                            ${isExpanded ? "h-auto" : "h-[800px]"} ${
+                              selectedPost.imageUrl && selectedPost.imageUrl !== post.imageUrl ? "opacity-40" : "opacity-100"
+                            }`} // Fixed height initially, expands on click
                         style={{ width: "400px", flex: "0 0 auto" }} 
                     >
                         {/* Post Header */}
