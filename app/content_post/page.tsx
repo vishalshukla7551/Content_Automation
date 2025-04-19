@@ -61,7 +61,7 @@ export default function InstagramPosts() {
       else if(response.status==0)
         {showSuccessAlert("Check Insta Account",response.message);}
       else
-      {showErrorAlert("Error",response.message);}
+      {showErrorAlert("Error Ocuurs",response.message);}
       setloading(false);
       if(response.status==0)
       {router.push("/dashboard/content/instagram-post-generator")}
