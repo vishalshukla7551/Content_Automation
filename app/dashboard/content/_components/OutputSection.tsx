@@ -28,8 +28,6 @@ function OutputSection({ aiOutput }: Props) {
   const path=usePathname();
   console.log(path)
   const [load, setload] = useState<boolean>(false);
-  const [jsondata,setjsondata]=useState<string>("");
-
   useEffect(() => {
     setIsMounted(true);
   }, []);
