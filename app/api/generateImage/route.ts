@@ -6,14 +6,14 @@ import sharp from "sharp";
 import { NextRequest, NextResponse } from "next/server";
 const client = new OpenAI({
     baseURL: 'https://api.studio.nebius.com/v1/',
-    apiKey: 'eyJhbGciOiJIUzI1NiIsImtpZCI6IlV6SXJWd1h0dnprLVRvdzlLZWstc0M1akptWXBvX1VaVkxUZlpnMDRlOFUiLCJ0eXAiOiJKV1QifQ.eyJzdWIiOiJnb29nbGUtb2F1dGgyfDEwMTA1Mzg4NzE2NjQ3NjQ1MTc2MSIsInNjb3BlIjoib3BlbmlkIG9mZmxpbmVfYWNjZXNzIiwiaXNzIjoiYXBpX2tleV9pc3N1ZXIiLCJhdWQiOlsiaHR0cHM6Ly9uZWJpdXMtaW5mZXJlbmNlLmV1LmF1dGgwLmNvbS9hcGkvdjIvIl0sImV4cCI6MTkwMDIyNjAxNiwidXVpZCI6ImNkMmQ3Nzc5LWVhYTctNGY4Ny05OTQwLWJjODRjNzQ2ZGQ3NyIsIm5hbWUiOiJhcGkiLCJleHBpcmVzX2F0IjoiMjAzMC0wMy0yMFQwODozMzozNiswMDAwIn0.hg9_qEKWrcOXD9ZyLS6X6VHF8fbPPLh_ZjxncI3BPb4',
+    apiKey: 'eyJhbGciOiJIUzI1NiIsImtpZCI6IlV6SXJWd1h0dnprLVRvdzlLZWstc0M1akptWXBvX1VaVkxUZlpnMDRlOFUiLCJ0eXAiOiJKV1QifQ.eyJzdWIiOiJnb29nbGUtb2F1dGgyfDEwNjQ5ODU2NTQwNDM4NTg0MzAxMSIsInNjb3BlIjoib3BlbmlkIG9mZmxpbmVfYWNjZXNzIiwiaXNzIjoiYXBpX2tleV9pc3N1ZXIiLCJhdWQiOlsiaHR0cHM6Ly9uZWJpdXMtaW5mZXJlbmNlLmV1LmF1dGgwLmNvbS9hcGkvdjIvIl0sImV4cCI6MTkxNjkzNzkyNiwidXVpZCI6IjAxOTk5YmYxLTljYTQtN2ZhMC1hMWE4LTU4YWUzMjRjY2VjZiIsIm5hbWUiOiJwb3N0aWZ5LmFpIiwiZXhwaXJlc19hdCI6IjIwMzAtMDktMjlUMTg6NDU6MjYrMDAwMCJ9.AVVJdN2182nY6TodrDOwXELpHeLY2gV-71qKkqKCxvM',
 });
 export async function POST(req: NextRequest) {
   try {
     const { imagepath, prompt} = await req.json();
 
     const response = await client.images.generate({
-      model: "stability-ai/sdxl",
+      model: "black-forest-labs/flux-schnell",
       response_format: "b64_json",
       extra_body: {
         response_extension: "webp",

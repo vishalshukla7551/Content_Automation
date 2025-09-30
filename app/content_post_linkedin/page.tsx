@@ -56,7 +56,7 @@ export default function LinkedinPost() {
       else if(response.data.status==0)
         {showSuccessAlert("Check Linkedin Account",response.data.message);}
       else
-      {showErrorAlert("Error",response.data.message);}
+      {showErrorAlert("Error Occurs",response.data.message);}
       setloading(false);
       if(response.data.status==0)
       {router.push("/dashboard/content/linkedin-post-generator")}
