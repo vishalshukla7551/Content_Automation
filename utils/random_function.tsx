@@ -81,14 +81,13 @@ for (const [index, post] of parsedJson.posts.entries()) {
     
 // ✅ Stringify JSON before encoding it for URL
 cleanedText = JSON.stringify({posts:updatedPosts});
-    
+      router.push(`/content_post?content=${encodeURIComponent(cleanedText)}`)
     console.log("Event")
   }
     catch(error){
       console.log("Error in creating Proper organised formate");}
       finally{
         console.log("ok");
-        router.push(`/content_post?content=${encodeURIComponent(cleanedText)}`)
         setloading(false);
       }
       }
@@ -163,14 +162,13 @@ export async function jsonlinkedin(Prompt1:any,setloading: (arg: boolean) => voi
         
     // ✅ Stringify JSON before encoding it for URL
     cleanedText = JSON.stringify({posts:updatedPosts});
-        
+         router.push(`/content_post_linkedin?content=${encodeURIComponent(cleanedText)}`)
         console.log("Event")
       }
         catch(error){
           console.log("Error in creating Proper organised formate");}
           finally{
             console.log("ok");
-            router.push(`/content_post_linkedin?content=${encodeURIComponent(cleanedText)}`)
             setloading(false);
           }
           }
